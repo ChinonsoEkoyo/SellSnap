@@ -1,0 +1,306 @@
+.backdrop {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 300;
+  padding: var(--spacing-4);
+}
+
+.overlay {
+  background-color: var(--color-surface);
+  border-radius: var(--radius-lg);
+  width: 100%;
+  max-width: clamp(340px, 10vw + 340px, 480px);
+  max-height: 90vh;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--spacing-5) var(--spacing-6) 0;
+}
+
+.title {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-semibold);
+  margin: 0;
+  color: var(--color-text-primary);
+}
+
+.closeButton {
+  width: clamp(28px, 0.3vw + 28px, 32px);
+  height: clamp(28px, 0.3vw + 28px, 32px);
+  border-radius: var(--radius-full);
+  border: none;
+  background: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-secondary);
+  transition: background-color 0.2s;
+}
+
+.closeButton:hover {
+  background-color: var(--color-surface-variant);
+}
+
+.closeTop {
+  position: absolute;
+  top: var(--spacing-4);
+  right: var(--spacing-4);
+  width: clamp(28px, 0.3vw + 28px, 32px);
+  height: clamp(28px, 0.3vw + 28px, 32px);
+  border-radius: var(--radius-full);
+  border: none;
+  background: rgba(0, 0, 0, 0.5);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  transition: background-color 0.2s;
+}
+
+.closeTop:hover {
+  background: rgba(0, 0, 0, 0.7);
+}
+
+.steps {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-2);
+  padding: var(--spacing-5) var(--spacing-6);
+}
+
+.stepDot {
+  width: clamp(24px, 0.3vw + 24px, 28px);
+  height: clamp(24px, 0.3vw + 24px, 28px);
+  border-radius: var(--radius-full);
+  background-color: var(--color-border-input);
+  color: var(--color-text-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.stepDot.stepActive {
+  background-color: var(--color-primary);
+  color: var(--color-on-primary);
+}
+
+.stepLine {
+  width: clamp(32px, 1vw + 32px, 48px);
+  height: clamp(1px, 0.1vw + 1px, 2px);
+  background-color: var(--color-border-input);
+  border-radius: var(--radius-full);
+  transition: background-color 0.3s;
+}
+
+.stepLine.stepLineActive {
+  background-color: var(--color-primary);
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-6);
+  padding: 0 var(--spacing-6) var(--spacing-6);
+}
+
+.formFields {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-4);
+}
+
+.error {
+  background-color: var(--color-error-container);
+  color: var(--color-on-error-container);
+  padding: var(--spacing-3);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-sm);
+  margin: 0;
+}
+
+.fieldGroup {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-1);
+}
+
+.fieldLabel {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-primary);
+}
+
+.textarea {
+  width: 100%;
+  min-height: 80px;
+  padding: var(--spacing-3);
+  border: 1px solid var(--color-border-input);
+  border-radius: var(--radius-md);
+  background-color: var(--color-surface);
+  color: var(--color-text-primary);
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-base);
+  resize: vertical;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.textarea:focus {
+  border-color: var(--color-primary);
+}
+
+.textarea::placeholder {
+  color: #aaa;
+}
+
+.stockRow {
+  display: flex;
+  gap: var(--spacing-2);
+  align-items: center;
+}
+
+.selectWrapper {
+  position: relative;
+  flex: 1;
+}
+
+.select {
+  width: 100%;
+  height: clamp(42px, 0.5vw + 42px, 48px);
+  padding: 0 var(--spacing-3);
+  border: 1px solid var(--color-border-input);
+  border-radius: var(--radius-md);
+  background-color: var(--color-surface);
+  color: var(--color-text-primary);
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-base);
+  outline: none;
+  appearance: none;
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+
+.select:focus {
+  border-color: var(--color-primary);
+}
+
+.selectIcon {
+  position: absolute;
+  right: var(--spacing-3);
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--color-text-secondary);
+  pointer-events: none;
+}
+
+.qtyInput {
+  flex: 1;
+  height: clamp(42px, 0.5vw + 42px, 48px);
+  padding: 0 var(--spacing-3);
+  border: 1px solid var(--color-border-input);
+  border-radius: var(--radius-md);
+  background-color: var(--color-surface);
+  color: var(--color-text-primary);
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-base);
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.qtyInput:focus {
+  border-color: var(--color-primary);
+}
+
+.qtyInput::placeholder {
+  color: #aaa;
+}
+
+.inputError {
+  border-color: var(--color-error);
+}
+
+.errorText {
+  font-size: var(--font-size-xs);
+  color: var(--color-error);
+  margin: 2px 0 0;
+}
+
+.footer {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--spacing-3);
+}
+
+/* Success state */
+.successBody {
+  padding: var(--spacing-8);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: var(--spacing-4);
+  position: relative;
+}
+
+.successIcon {
+  width: clamp(48px, 1vw + 48px, 64px);
+  height: clamp(48px, 1vw + 48px, 64px);
+  border-radius: var(--radius-full);
+  background-color: var(--color-success-container);
+  color: var(--color-success);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.successTitle {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-semibold);
+  margin: 0;
+  color: var(--color-text-primary);
+}
+
+.successName {
+  font-size: var(--font-size-base);
+  color: var(--color-text-secondary);
+  margin: 0;
+}
+
+.linkBox {
+  width: 100%;
+  background-color: var(--color-surface-variant);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-3) var(--spacing-4);
+  overflow: hidden;
+}
+
+.linkUrl {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-secondary);
+  word-break: break-all;
+  font-family: monospace;
+}
+
+.successActions {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-3);
+}

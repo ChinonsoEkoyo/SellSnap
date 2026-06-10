@@ -1,0 +1,95 @@
+.container {
+  width: 100%;
+  max-width: 420px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-8);
+}
+
+.logo {
+  object-fit: contain;
+  height: auto;
+}
+
+.progressBar {
+  width: 100%;
+  display: flex;
+  gap: var(--spacing-2);
+}
+
+.progressSegment {
+  flex: 1;
+  height: 4px;
+  border-radius: var(--radius-full);
+  background-color: var(--color-border-input);
+  transition: background-color 0.3s ease;
+}
+
+.progressSegment.active {
+  background-color: var(--color-primary);
+}
+
+.step {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-6);
+}
+
+.imageWrapper {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.image {
+  width: 100%;
+  height: auto;
+  max-width: 280px;
+  object-fit: contain;
+}
+
+.stepHeader {
+  text-align: center;
+}
+
+.stepTitle {
+  font-family: var(--font-family-headings);
+  font-size: var(--font-title-large-size);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+  margin: 0 0 var(--spacing-2) 0;
+}
+
+.stepDescription {
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-sm);
+  color: var(--color-outline);
+  margin: 0;
+  line-height: 1.6;
+}
+
+.actions {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-3);
+}
+
+.skipButton {
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-sm);
+  color: var(--color-primary);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: var(--spacing-2);
+  text-align: center;
+}
+
+.skipButton:hover {
+  text-decoration: underline;
+}

@@ -1,0 +1,173 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-4);
+}
+
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(clamp(180px, 5vw + 180px, 240px), 1fr));
+  gap: var(--spacing-4);
+}
+
+.statCard {
+  padding: var(--spacing-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-1);
+}
+
+.statLabel {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-secondary);
+  font-weight: var(--font-weight-medium);
+}
+
+.statValue {
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-primary);
+}
+
+.recentOrders {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-4);
+  margin-top: var(--spacing-2);
+}
+
+.sectionTitle {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+}
+
+.emptyText {
+  color: var(--color-text-secondary);
+  font-style: italic;
+}
+
+.ordersList {
+  display: flex;
+  flex-direction: column;
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
+  overflow: visible;
+}
+
+.ordersHeader {
+  display: none;
+}
+
+.orderItem {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-template-areas: 
+    "product amount"
+    "id status"
+    "date date";
+  align-items: center;
+  gap: var(--spacing-2);
+  padding: var(--spacing-4) 0;
+  border-bottom: 1px solid var(--color-border-light);
+}
+
+.orderId {
+  grid-area: id;
+  font-size: var(--font-size-xs);
+  color: var(--color-text-tertiary);
+  font-family: inherit;
+}
+
+.orderProduct {
+  grid-area: product;
+  font-weight: var(--font-weight-medium);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-primary);
+}
+
+.orderAmount {
+  grid-area: amount;
+  font-weight: var(--font-weight-medium);
+  font-size: var(--font-size-sm);
+  text-align: right;
+  color: var(--color-text-primary);
+}
+
+.orderStatus {
+  grid-area: status;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.orderDate {
+  grid-area: date;
+  font-size: var(--font-size-xs);
+  color: var(--color-text-tertiary);
+}
+
+.badge {
+  padding: 4px 12px;
+  border-radius: var(--radius-full);
+  font-size: 10px;
+  letter-spacing: 0.05em;
+  font-weight: var(--font-weight-bold);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 80px;
+}
+
+.pending {
+  background-color: #fffbeb;
+  color: #ca8a04;
+  border: 1px solid #fde68a;
+}
+
+.paid {
+  background-color: #f0fdf4;
+  color: #15803d;
+  border: 1px solid #bbf7d0;
+}
+
+.failed {
+  background-color: #fef2f2;
+  color: #b91c1c;
+  border: 1px solid #fecaca;
+}
+
+@media (min-width: 768px) {
+  .ordersHeader {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr 1fr 1fr 1.2fr;
+    padding: var(--spacing-3) var(--spacing-2);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-medium);
+    color: #a1a1aa;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    background-color: #fafbfc;
+    border-bottom: none;
+    border-top: none;
+    margin-bottom: 0;
+  }
+
+  .orderItem {
+    grid-template-columns: 1fr 1.5fr 1fr 1fr 1.2fr;
+    grid-template-areas: none;
+    display: grid;
+    gap: 0;
+    padding: var(--spacing-4) var(--spacing-2);
+    border-bottom: 1px solid var(--color-border-light);
+    border-top: none;
+  }
+
+  .orderId, .orderProduct, .orderAmount, .orderStatus, .orderDate {
+    grid-area: auto;
+  }
+
+  .orderAmount, .orderStatus {
+    text-align: left;
+    justify-content: flex-start;
+  }
+}

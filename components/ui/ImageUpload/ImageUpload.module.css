@@ -1,0 +1,109 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2);
+}
+
+.labelRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.label {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-primary);
+}
+
+.counter {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-secondary);
+}
+
+.thumbs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-2);
+}
+
+.thumb {
+  position: relative;
+  width: clamp(64px, 1vw + 64px, 80px);
+  height: clamp(64px, 1vw + 64px, 80px);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  border: 1px solid var(--color-border-light);
+  background-color: var(--color-surface-variant);
+}
+
+.thumbImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.thumbRemove {
+  position: absolute;
+  top: clamp(1px, 0.1vw + 1px, 2px);
+  right: clamp(1px, 0.1vw + 1px, 2px);
+  width: clamp(18px, 0.2vw + 18px, 20px);
+  height: clamp(18px, 0.2vw + 18px, 20px);
+  border-radius: var(--radius-full);
+  background-color: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s;
+}
+
+.thumbRemove:hover {
+  background-color: rgba(0, 0, 0, 0.8);
+}
+
+.addBtn {
+  width: clamp(64px, 1vw + 64px, 80px);
+  height: clamp(64px, 1vw + 64px, 80px);
+  border: 2px dashed var(--color-border-input);
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  transition: border-color 0.2s, background-color 0.2s;
+}
+
+.addBtn:hover {
+  border-color: var(--color-primary);
+  background-color: color-mix(in srgb, var(--color-primary) 4%, transparent);
+}
+
+.addBtn.dragging {
+  border-color: var(--color-primary);
+  background-color: color-mix(in srgb, var(--color-primary) 8%, transparent);
+}
+
+.input {
+  display: none;
+}
+
+.spinner {
+  animation: spin 0.8s linear infinite;
+}
+
+.hint {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-secondary);
+  margin: 0;
+  line-height: 1.4;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

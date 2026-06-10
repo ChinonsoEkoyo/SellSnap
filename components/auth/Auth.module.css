@@ -1,0 +1,78 @@
+.eyebrow {
+  color: var(--color-primary);
+  font-family: var(--font-family-base);
+  font-size: var(--font-label-medium-size);
+  font-weight: var(--font-label-medium-weight);
+  line-height: var(--font-label-medium-line-height);
+  margin: 0 0 4px;
+  text-transform: uppercase;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-4);
+}
+
+.footer {
+  text-align: center;
+  margin-top: var(--spacing-4);
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+}
+
+.link {
+  color: var(--color-primary);
+  text-decoration: none;
+  font-weight: var(--font-weight-medium);
+}
+
+.link:hover {
+  text-decoration: underline;
+}
+
+.linkButton {
+  composes: link;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  font: inherit;
+}
+
+.forgotLink {
+  color: var(--color-primary);
+  text-decoration: none;
+  font-weight: 400;
+}
+
+.forgotLink:hover {
+  text-decoration: underline;
+}
+
+.buttonRow {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-2);
+}
+
+.errorAlert {
+  background-color: var(--color-error-container);
+  color: var(--color-on-error-container);
+  padding: var(--spacing-3);
+  border-radius: var(--radius-md);
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-sm);
+  margin-bottom: var(--spacing-4);
+}
+
+.successAlert {
+  background-color: var(--color-success-container);
+  color: var(--color-success);
+  padding: var(--spacing-3);
+  border-radius: var(--radius-md);
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-sm);
+}

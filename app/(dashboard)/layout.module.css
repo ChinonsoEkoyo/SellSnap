@@ -1,0 +1,128 @@
+.container {
+  display: flex;
+  min-height: 100vh;
+  background-color: #ffffff;
+}
+
+.sidebar {
+  width: clamp(200px, 1.5vw + 200px, 220px);
+  background-color: var(--color-surface);
+  display: flex;
+  flex-direction: column;
+  padding: var(--spacing-5) var(--spacing-4);
+}
+
+.logo {
+  font-family: var(--font-family-headings);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-primary);
+  margin-bottom: var(--spacing-8);
+}
+
+.nav {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-1);
+}
+
+.navItem {
+  display: block;
+  padding: var(--spacing-2) var(--spacing-3);
+  border-radius: var(--radius-md);
+  color: var(--color-text-secondary);
+  font-weight: var(--font-weight-medium);
+  font-size: var(--font-size-sm);
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.navItem:hover {
+  background-color: var(--color-surface-variant);
+  color: var(--color-primary);
+}
+
+.userSection {
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-3);
+  padding-top: var(--spacing-4);
+  border-top: 1px solid var(--color-border-light);
+}
+
+.userInfo {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-3);
+}
+
+.userBadge {
+  width: clamp(28px, 0.6vw + 28px, 36px);
+  height: clamp(28px, 0.6vw + 28px, 36px);
+  border-radius: var(--radius-full);
+  background-color: var(--color-primary);
+  color: var(--color-on-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  flex-shrink: 0;
+}
+
+.userDetails {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.userBusinessName {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.userFullName {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.logoutButton {
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-xs);
+  color: var(--color-text-secondary);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  text-align: left;
+  transition: color 0.2s;
+}
+
+.logoutButton:hover {
+  color: var(--color-error);
+}
+
+.main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+.content {
+  flex: 1;
+  padding: var(--spacing-6);
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+    display: none;
+  }
+}

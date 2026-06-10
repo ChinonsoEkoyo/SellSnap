@@ -1,0 +1,192 @@
+.card {
+  background-color: #fff;
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  transition: box-shadow 0.2s;
+}
+
+.card:hover {
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+}
+
+.imageWrapper {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  background-color: var(--color-surface-variant);
+  overflow: hidden;
+}
+
+.image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-xs);
+}
+
+.bottomRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--spacing-3) var(--spacing-4);
+  gap: var(--spacing-2);
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  flex: 1;
+}
+
+.name {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin: 0;
+}
+
+.price {
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-primary);
+  margin: 0;
+}
+
+.cardActions {
+  display: flex;
+  gap: 2px;
+  flex-shrink: 0;
+}
+
+.cardAction {
+  width: clamp(26px, 0.3vw + 26px, 30px);
+  height: clamp(26px, 0.3vw + 26px, 30px);
+  border-radius: var(--radius-sm);
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-secondary);
+  text-decoration: none;
+  transition: background-color 0.15s, color 0.15s;
+}
+
+.cardAction:hover {
+  background-color: var(--color-surface-variant);
+  color: var(--color-primary);
+}
+
+.cardDelete:hover {
+  color: var(--color-error);
+}
+
+.cardAction:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* List view */
+.listRow {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-4);
+  padding: var(--spacing-3) var(--spacing-4);
+  background-color: #fff;
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-md);
+  transition: box-shadow 0.2s;
+}
+
+.listRow:hover {
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+}
+
+.listImage {
+  width: clamp(40px, 0.6vw + 40px, 48px);
+  height: clamp(40px, 0.6vw + 40px, 48px);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  background-color: var(--color-surface-variant);
+  flex-shrink: 0;
+}
+
+.listImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.listPlaceholder {
+  width: 100%;
+  height: 100%;
+  background-color: var(--color-surface-variant);
+}
+
+.listName {
+  flex: 1;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.listPrice {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-primary);
+  min-width: clamp(60px, 1.5vw + 60px, 80px);
+  text-align: right;
+}
+
+.listActions {
+  display: flex;
+  gap: 2px;
+}
+
+.listAction {
+  width: clamp(28px, 0.3vw + 28px, 32px);
+  height: clamp(28px, 0.3vw + 28px, 32px);
+  border-radius: var(--radius-sm);
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-secondary);
+  text-decoration: none;
+  transition: background-color 0.15s, color 0.15s;
+}
+
+.listAction:hover {
+  background-color: var(--color-surface-variant);
+  color: var(--color-primary);
+}
+
+.listDelete:hover {
+  color: var(--color-error);
+}
+
+.listAction:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

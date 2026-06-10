@@ -1,0 +1,31 @@
+.container {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  margin-top: var(--spacing-2);
+}
+
+.positive, .negative, .neutral {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-1);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+}
+
+.positive {
+  color: var(--color-success);
+}
+
+.negative {
+  color: var(--color-error);
+}
+
+.neutral {
+  color: var(--color-text-secondary);
+}
+
+.label {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-secondary);
+}

@@ -1,0 +1,24 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--color-surface-container-lowest);
+  padding: var(--spacing-4);
+}
+
+.logoLink {
+  display: block;
+  margin-bottom: var(--spacing-6);
+}
+
+.logo {
+  object-fit: contain;
+  height: auto;
+}
+
+.content {
+  width: 100%;
+  max-width: 400px;
+}
