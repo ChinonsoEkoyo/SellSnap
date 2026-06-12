@@ -31,28 +31,33 @@ export default async function DashboardPage() {
     }
   });
 
+  const userProductIds = (await db.product.findMany({
+    where: { userId: session?.user?.id },
+    select: { id: true },
+  })).map((p: { id: string }) => p.id);
+
   // Recent Orders
   const orders = await db.order.findMany({
-    where: { productId: { in: (await db.product.findMany({ where: { userId: session?.user?.id }, select: { id: true } })).map(p => p.id) } },
+    where: { productId: { in: userProductIds } },
     take: 5,
     orderBy: { createdAt: 'desc' },
     include: { product: true }
   });
 
   const totalOrdersCount = await db.order.count({
-    where: { productId: { in: (await db.product.findMany({ where: { userId: session?.user?.id }, select: { id: true } })).map(p => p.id) } }
+    where: { productId: { in: userProductIds } }
   });
 
   const currentPeriodOrders = await db.order.count({
     where: { 
-      productId: { in: (await db.product.findMany({ where: { userId: session?.user?.id }, select: { id: true } })).map(p => p.id) },
+      productId: { in: userProductIds },
       createdAt: { gte: thirtyDaysAgo }
     }
   });
 
   const prevPeriodOrders = await db.order.count({
     where: { 
-      productId: { in: (await db.product.findMany({ where: { userId: session?.user?.id }, select: { id: true } })).map(p => p.id) },
+      productId: { in: userProductIds },
       createdAt: { gte: sixtyDaysAgo, lt: thirtyDaysAgo }
     }
   });
@@ -61,7 +66,7 @@ export default async function DashboardPage() {
   const totalRevenue = await db.order.aggregate({
     where: { 
       status: 'paid',
-      productId: { in: (await db.product.findMany({ where: { userId: session?.user?.id }, select: { id: true } })).map(p => p.id) } 
+      productId: { in: userProductIds } 
     },
     _sum: { amount: true }
   });
@@ -69,7 +74,7 @@ export default async function DashboardPage() {
   const currentRevenue = await db.order.aggregate({
     where: { 
       status: 'paid',
-      productId: { in: (await db.product.findMany({ where: { userId: session?.user?.id }, select: { id: true } })).map(p => p.id) },
+      productId: { in: userProductIds },
       createdAt: { gte: thirtyDaysAgo }
     },
     _sum: { amount: true }
@@ -78,7 +83,7 @@ export default async function DashboardPage() {
   const prevRevenue = await db.order.aggregate({
     where: { 
       status: 'paid',
-      productId: { in: (await db.product.findMany({ where: { userId: session?.user?.id }, select: { id: true } })).map(p => p.id) },
+      productId: { in: userProductIds },
       createdAt: { gte: sixtyDaysAgo, lt: thirtyDaysAgo }
     },
     _sum: { amount: true }
