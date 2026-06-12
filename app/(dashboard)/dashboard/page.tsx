@@ -146,7 +146,7 @@ export default async function DashboardPage() {
               <span>Status</span>
               <span>Date</span>
             </div>
-            {orders.map(order => (
+            {orders.map((order: { id: string; amount: number; status: string; createdAt: Date; product: { name: string } }) => (
               <div key={order.id} className={styles.orderItem}>
                 <div className={styles.orderId}>#{order.id.slice(-6).toUpperCase()}</div>
                 <div className={styles.orderProduct}>{order.product.name}</div>
