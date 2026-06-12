@@ -6,7 +6,8 @@ const envSchema = z.object({
   NEXTAUTH_URL: z.string().url().optional(),
   NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY: z.string().startsWith('pk_'),
   PAYSTACK_SECRET_KEY: z.string().startsWith('sk_'),
-  RESEND_API_KEY: z.string().startsWith('re_').optional(),
+  RESEND_API_KEY: z.string().startsWith('re_'),
+  EMAIL_FROM: z.string().default('SellSnap <onboarding@resend.dev>'),
   NEXT_PUBLIC_APP_URL: z.string().url().optional(),
 });
 

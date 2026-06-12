@@ -3,6 +3,7 @@
 import { db } from '@/lib/db';
 import { logger } from '@/lib/logger';
 import { createOrderSchema, confirmPaymentSchema } from '@/lib/validators/order';
+import { sendEmail, buyerConfirmationHtml, sellerNotificationHtml } from '@/lib/email';
 
 export type OrderFormState = {
   message: string;
@@ -112,11 +113,11 @@ export async function confirmPayment(
   }
 
   // Lookup product
-  let product: { price: number; userId: string | null; stockType: string; stockQuantity: number | null } | null;
+  let product: { name: string; price: number; userId: string | null; stockType: string; stockQuantity: number | null } | null;
   try {
     product = await db.product.findUnique({
       where: { id: productId },
-      select: { price: true, userId: true, stockType: true, stockQuantity: true },
+      select: { name: true, price: true, userId: true, stockType: true, stockQuantity: true },
     });
   } catch (error) {
     logger.error('confirmPayment.productLookup', { error });
@@ -180,7 +181,7 @@ export async function confirmPayment(
     if (error.code === 'P2002') {
       return { message: '', success: true };
     }
-    logger.error('confirmPayment.createPayment', { error, errorCode: error?.code, errorName: error?.name, errorMessage: error?.message, orderId: order.id, gatewayReference: paymentRef, totalAmount });
+    logger.error('confirmPayment.createPayment', { error, orderId: order.id, gatewayReference: paymentRef, totalAmount });
     try {
       await db.order.delete({ where: { id: order.id } });
     } catch (cleanupError) {
@@ -211,6 +212,54 @@ export async function confirmPayment(
       logger.error('confirmPayment.stockDecrement', { error: stockError });
       return { message: 'Something went wrong. [E5]' };
     }
+  }
+
+  // Send confirmation emails (fire-and-forget)
+  (async () => {
+    try {
+      await sendEmail({
+        to: buyerEmail,
+        subject: 'Order confirmed!',
+        html: buyerConfirmationHtml({
+          buyerName,
+          productName: product.name,
+          quantity,
+          amount: totalAmount,
+          orderId: order.id,
+        }),
+      });
+    } catch (e) {
+      logger.error('confirmPayment.buyerEmail', { error: e });
+    }
+  })();
+
+  if (product.userId) {
+    (async () => {
+      try {
+        const seller = await db.user.findUnique({
+          where: { id: product.userId! },
+          select: { email: true, name: true },
+        });
+        if (seller?.email) {
+          await sendEmail({
+            to: seller.email,
+            subject: `New order for ${product.name}`,
+            html: sellerNotificationHtml({
+              sellerName: seller.name || 'Seller',
+              productName: product.name,
+              buyerName,
+              buyerEmail,
+              buyerPhone,
+              deliveryAddress,
+              quantity,
+              amount: totalAmount,
+            }),
+          });
+        }
+      } catch (e) {
+        logger.error('confirmPayment.sellerEmail', { error: e });
+      }
+    })();
   }
 
   return { message: '', success: true };

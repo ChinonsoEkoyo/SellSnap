@@ -5,6 +5,7 @@ import { nanoid } from 'nanoid';
 import { db } from '@/lib/db';
 import { getSession } from '@/lib/auth';
 import { logger } from '@/lib/logger';
+import { sendEmail, productCreatedHtml } from '@/lib/email';
 import { createProductSchema, updateProductSchema } from '@/lib/validators/product';
 
 export type ProductFormState = {
@@ -69,6 +70,29 @@ export async function createProduct(
         isPublished: true,
       },
     });
+
+    (async () => {
+      try {
+        const user = await db.user.findUnique({
+          where: { id: session.user.id },
+          select: { email: true, name: true },
+        });
+        if (user?.email) {
+          await sendEmail({
+            to: user.email,
+            subject: `Product created: ${product.name}`,
+            html: productCreatedHtml({
+              name: user.name || 'Seller',
+              productName: product.name,
+              productPrice: product.price,
+              productSlug: product.slug,
+            }),
+          });
+        }
+      } catch (e) {
+        logger.error('product.created.email', { error: e });
+      }
+    })();
 
     return { message: '', success: true, product: { id: product.id, name: product.name, slug: product.slug, price: product.price, imageUrl: product.imageUrl, imageUrls: product.imageUrls, description: product.description, stockType: product.stockType, stockQuantity: product.stockQuantity } };
   } catch (error) {

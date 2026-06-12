@@ -3,6 +3,7 @@ import crypto from 'crypto';
 
 import { db } from '@/lib/db';
 import { logger } from '@/lib/logger';
+import { sendEmail, buyerConfirmationHtml, sellerNotificationHtml } from '@/lib/email';
 
 export async function POST(request: Request) {
   const rawBody = await request.text();
@@ -60,11 +61,11 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'Missing required metadata' }, { status: 400 });
   }
 
-  let product: { price: number; userId: string | null; stockType: string; stockQuantity: number | null } | null;
+  let product: { name: string; price: number; userId: string | null; stockType: string; stockQuantity: number | null } | null;
   try {
     product = await db.product.findUnique({
       where: { id: productId },
-      select: { price: true, userId: true, stockType: true, stockQuantity: true },
+      select: { name: true, price: true, userId: true, stockType: true, stockQuantity: true },
     });
   } catch (error) {
     logger.error('webhook.step2.productLookup', { error: String(error) });
@@ -150,6 +151,54 @@ export async function POST(request: Request) {
       logger.error('webhook.step6.stockDecrement', { error: String(stockError) });
       return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
     }
+  }
+
+  // Send confirmation emails (fire-and-forget)
+  Promise.resolve().then(async () => {
+    try {
+      await sendEmail({
+        to: buyerEmail,
+        subject: 'Order confirmed!',
+        html: buyerConfirmationHtml({
+          buyerName,
+          productName: product.name,
+          quantity,
+          amount: totalAmount,
+          orderId: order.id,
+        }),
+      });
+    } catch (e) {
+      logger.error('webhook.buyerEmail', { error: e });
+    }
+  });
+
+  if (product.userId) {
+    Promise.resolve().then(async () => {
+      try {
+        const seller = await db.user.findUnique({
+          where: { id: product.userId! },
+          select: { email: true, name: true },
+        });
+        if (seller?.email) {
+          await sendEmail({
+            to: seller.email,
+            subject: `New order for ${product.name}`,
+            html: sellerNotificationHtml({
+              sellerName: seller.name || 'Seller',
+              productName: product.name,
+              buyerName,
+              buyerEmail,
+              buyerPhone,
+              deliveryAddress,
+              quantity,
+              amount: totalAmount,
+            }),
+          });
+        }
+      } catch (e) {
+        logger.error('webhook.sellerEmail', { error: e });
+      }
+    });
   }
 
   return NextResponse.json({ received: true });
