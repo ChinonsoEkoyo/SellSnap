@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { Wallet, Star } from 'lucide-react';
+import { Wallet, Star, Lock } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 
 import styles from './page.module.css';
@@ -82,7 +82,7 @@ export default function Home() {
                   Pay Now
                 </Button>
                 <div className={styles.secureFooter}>
-                  Secured By <span className={styles.paystack}>Paystack</span>
+                  <Lock size={14} /> Secured By <span className={styles.paystack}>Paystack</span>
                 </div>
               </div>
 

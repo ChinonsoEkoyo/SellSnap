@@ -29,6 +29,8 @@
   border-radius: var(--radius-md);
   background-color: var(--color-surface);
   transition: border-color 0.2s;
+  overflow: hidden;
+  box-sizing: border-box;
 }
 
 .inputWrapper:hover {

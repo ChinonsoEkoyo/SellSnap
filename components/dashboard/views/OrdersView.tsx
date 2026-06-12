@@ -1,7 +1,7 @@
 'use client';
 
-import { useState, useMemo } from 'react';
-import { Search } from 'lucide-react';
+import { useState, useMemo, useEffect } from 'react';
+import { Search, ChevronLeft, ChevronRight } from 'lucide-react';
 
 import { PageHeader } from '@/components/ui/PageHeader';
 import styles from './OrdersView.module.css';
@@ -36,6 +36,8 @@ const tabs = [
 export function OrdersView({ orders }: OrdersContentProps) {
   const [activeTab, setActiveTab] = useState('all');
   const [search, setSearch] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const perPage = 10;
 
   const filtered = useMemo(() => {
     let result = orders;
@@ -53,6 +55,13 @@ export function OrdersView({ orders }: OrdersContentProps) {
     }
     return result;
   }, [orders, activeTab, search]);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [activeTab, search]);
+
+  const totalPages = Math.max(1, Math.ceil(filtered.length / perPage));
+  const paginatedOrders = filtered.slice((currentPage - 1) * perPage, currentPage * perPage);
 
   return (
     <div className={styles.container}>
@@ -109,7 +118,7 @@ export function OrdersView({ orders }: OrdersContentProps) {
             <span>Status</span>
             <span>Date</span>
           </div>
-          {filtered.map((order) => (
+          {paginatedOrders.map((order) => (
             <div key={order.id} className={styles.tableRow}>
               <span className={styles.colId}>#{order.id.slice(-6).toUpperCase()}</span>
               <span className={styles.colProduct}>{order.product.name}</span>
@@ -130,6 +139,37 @@ export function OrdersView({ orders }: OrdersContentProps) {
               </span>
             </div>
           ))}
+        </div>
+      )}
+
+      {totalPages > 1 && (
+        <div className={styles.pagination}>
+          <button
+            type="button"
+            className={styles.paginationButton}
+            disabled={currentPage <= 1}
+            onClick={() => setCurrentPage((p) => p - 1)}
+          >
+            <ChevronLeft size={16} />
+          </button>
+          {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+            <button
+              key={page}
+              type="button"
+              className={`${styles.paginationButton} ${currentPage === page ? styles.paginationActive : ''}`}
+              onClick={() => setCurrentPage(page)}
+            >
+              {page}
+            </button>
+          ))}
+          <button
+            type="button"
+            className={styles.paginationButton}
+            disabled={currentPage >= totalPages}
+            onClick={() => setCurrentPage((p) => p + 1)}
+          >
+            <ChevronRight size={16} />
+          </button>
         </div>
       )}
     </div>

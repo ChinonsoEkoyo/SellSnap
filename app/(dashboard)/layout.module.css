@@ -113,7 +113,8 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  overflow-y: auto;
+  min-height: 100vh;
+  margin-left: clamp(200px, 1.5vw + 200px, 220px);
 }
 
 .content {
@@ -124,5 +125,15 @@
 @media (max-width: 768px) {
   .sidebar {
     display: none;
+  }
+
+  .main {
+    margin-left: 0;
+    padding-top: 52px;
+    padding-bottom: calc(clamp(56px, 1vw + 56px, 64px) + env(safe-area-inset-bottom, 0px));
+  }
+
+  .content {
+    padding: var(--spacing-4);
   }
 }

@@ -239,6 +239,10 @@
   text-align: center;
   font-size: var(--font-label-small-size);
   color: var(--color-on-surface-variant);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
 }
 
 .paystack {

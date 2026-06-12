@@ -13,7 +13,7 @@ const steps = [
     image: '/images/sharelink.png',
     title: 'Share your payment link',
     description:
-      'Create a payment link for any product and share it anywhere — social media, email, or text. Your buyers pay with just a tap.',
+      'Create a payment link for any product and share it anywhere social media, email, or text. Your buyers pay with just a tap.',
   },
   {
     image: '/images/neworder.png',

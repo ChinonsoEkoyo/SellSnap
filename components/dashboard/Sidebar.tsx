@@ -115,6 +115,16 @@ export function Sidebar({ businessName, fullName }: SidebarProps) {
         </div>
       </aside>
 
+      <div className={styles.mobileHeader}>
+        <Image
+          src="/images/SellSnapLogo.png"
+          alt="SellSnap"
+          width={100}
+          height={23}
+          priority
+        />
+      </div>
+
       <nav className={styles.mobileNav}>
           {navItems.map((item) => {
           const isActive = item.href === '/dashboard' 
