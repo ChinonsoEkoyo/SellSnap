@@ -2,11 +2,13 @@
 
 import { useState, useMemo, useEffect } from 'react';
 import { useSearchParams, useRouter, usePathname } from 'next/navigation';
-import { Plus, LayoutGrid, List, Search, SlidersHorizontal, Loader2 } from 'lucide-react';
+import { Plus, LayoutGrid, List, Search, SlidersHorizontal } from 'lucide-react';
 
 import { ProductCard } from '@/components/product/ProductCard';
 import { Button } from '@/components/ui/Button';
 import { CreateProductOverlay } from '@/components/product/CreateProductOverlay';
+import { EditProductOverlay } from '@/components/product/EditProductOverlay';
+import { DeleteProductModal } from '@/components/product/DeleteProductModal';
 import styles from './ProductsView.module.css';
 
 interface Product {
@@ -15,7 +17,10 @@ interface Product {
   description: string | null;
   price: number;
   imageUrl: string | null;
+  imageUrls: string | null;
   slug: string;
+  stockType: string;
+  stockQuantity: number | null;
   isPublished: boolean;
   createdAt: Date;
 }
@@ -28,15 +33,16 @@ export function ProductsView({ products: initialProducts }: ProductsContentProps
   const [products, setProducts] = useState(initialProducts);
   const [view, setView] = useState<'grid' | 'list'>('grid');
   const [search, setSearch] = useState('');
-  const [showOverlay, setShowOverlay] = useState(false);
+  const [showCreateOverlay, setShowCreateOverlay] = useState(false);
+  const [editingProduct, setEditingProduct] = useState<Product | null>(null);
+  const [deletingProduct, setDeletingProduct] = useState<Product | null>(null);
   const searchParams = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();
 
   useEffect(() => {
     if (searchParams.get('create') === 'true') {
-      setShowOverlay(true);
-      // Clean up the URL
+      setShowCreateOverlay(true);
       const newParams = new URLSearchParams(searchParams.toString());
       newParams.delete('create');
       const query = newParams.toString();
@@ -67,7 +73,7 @@ export function ProductsView({ products: initialProducts }: ProductsContentProps
 
       <div className={styles.toolbar}>
         <div className={styles.toolbarLeft}>
-          <Button onClick={() => setShowOverlay(true)}>
+          <Button onClick={() => setShowCreateOverlay(true)}>
             <Plus size={16} />
             Add Product
           </Button>
@@ -126,21 +132,57 @@ export function ProductsView({ products: initialProducts }: ProductsContentProps
       ) : view === 'grid' ? (
         <div className={styles.grid}>
           {filtered.map((product) => (
-            <ProductCard key={product.id} product={product} />
+            <ProductCard
+              key={product.id}
+              product={product}
+              onEdit={(p) => setEditingProduct(p as Product)}
+              onDelete={(p) => setDeletingProduct(p as Product)}
+            />
           ))}
         </div>
       ) : (
         <div className={styles.list}>
           {filtered.map((product) => (
-            <ProductCard key={product.id} product={product} listView />
+            <ProductCard
+              key={product.id}
+              product={product}
+              listView
+              onEdit={(p) => setEditingProduct(p as Product)}
+              onDelete={(p) => setDeletingProduct(p as Product)}
+            />
           ))}
         </div>
       )}
 
-      {showOverlay && (
+      {showCreateOverlay && (
         <CreateProductOverlay
-          onClose={() => setShowOverlay(false)}
+          onClose={() => setShowCreateOverlay(false)}
           onProductCreated={(product) => setProducts((prev) => [product, ...prev])}
+        />
+      )}
+
+      {editingProduct && (
+        <EditProductOverlay
+          product={editingProduct}
+          onClose={() => setEditingProduct(null)}
+          onProductUpdated={(updated) => {
+            setProducts((prev) =>
+              prev.map((p) =>
+                p.id === updated.id
+                  ? { ...p, ...updated, createdAt: p.createdAt, isPublished: p.isPublished }
+                  : p,
+              ),
+            );
+            setEditingProduct(null);
+          }}
+        />
+      )}
+
+      {deletingProduct && (
+        <DeleteProductModal
+          product={deletingProduct}
+          onClose={() => setDeletingProduct(null)}
+          onDeleted={() => setProducts((prev) => prev.filter((p) => p.id !== deletingProduct.id))}
         />
       )}
     </div>

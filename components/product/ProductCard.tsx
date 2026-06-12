@@ -3,7 +3,6 @@
 import { useState } from 'react';
 import { Copy, Share2, Pencil, Trash2, Check } from 'lucide-react';
 
-import { deleteProduct } from '@/app/actions/product';
 import styles from './ProductCard.module.css';
 
 interface ProductCardProps {
@@ -16,11 +15,12 @@ interface ProductCardProps {
     slug: string;
   };
   listView?: boolean;
+  onEdit?: (product: ProductCardProps['product']) => void;
+  onDelete?: (product: ProductCardProps['product']) => void;
 }
 
-export function ProductCard({ product, listView }: ProductCardProps) {
+export function ProductCard({ product, listView, onEdit, onDelete }: ProductCardProps) {
   const [copied, setCopied] = useState(false);
-  const [deleting, setDeleting] = useState(false);
   const formattedPrice = (product.price / 100).toLocaleString('en-NG', {
     style: 'currency',
     currency: 'NGN',
@@ -56,13 +56,6 @@ export function ProductCard({ product, listView }: ProductCardProps) {
     }
   };
 
-  const handleDelete = async () => {
-    if (!confirm('Are you sure you want to delete this product?')) return;
-    setDeleting(true);
-    await deleteProduct(product.id);
-    window.location.reload();
-  };
-
   if (listView) {
     return (
       <div className={styles.listRow}>
@@ -82,14 +75,13 @@ export function ProductCard({ product, listView }: ProductCardProps) {
           <button type="button" className={styles.listAction} onClick={handleShare} aria-label="Share">
             <Share2 size={14} />
           </button>
-          <a href={`/products/${product.id}/edit`} className={styles.listAction} aria-label="Edit">
+          <button type="button" className={styles.listAction} onClick={() => onEdit?.(product)} aria-label="Edit">
             <Pencil size={14} />
-          </a>
+          </button>
           <button
             type="button"
             className={`${styles.listAction} ${styles.listDelete}`}
-            onClick={handleDelete}
-            disabled={deleting}
+            onClick={() => onDelete?.(product)}
             aria-label="Delete"
           >
             <Trash2 size={14} />
@@ -130,14 +122,18 @@ export function ProductCard({ product, listView }: ProductCardProps) {
           >
             <Share2 size={14} />
           </button>
-          <a href={`/products/${product.id}/edit`} className={styles.cardAction} aria-label="Edit">
+          <button
+            type="button"
+            className={styles.cardAction}
+            onClick={() => onEdit?.(product)}
+            aria-label="Edit"
+          >
             <Pencil size={14} />
-          </a>
+          </button>
           <button
             type="button"
             className={`${styles.cardAction} ${styles.cardDelete}`}
-            onClick={handleDelete}
-            disabled={deleting}
+            onClick={() => onDelete?.(product)}
             aria-label="Delete"
           >
             <Trash2 size={14} />

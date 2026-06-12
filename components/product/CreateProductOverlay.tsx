@@ -45,6 +45,8 @@ interface CreateProductOverlayProps {
     description: string | null;
     imageUrl: string | null;
     imageUrls: string | null;
+    stockType: string;
+    stockQuantity: number | null;
     isPublished: boolean;
     createdAt: Date;
   }) => void;
@@ -83,6 +85,8 @@ export function CreateProductOverlay({ onClose, onProductCreated }: CreateProduc
         description: description || null,
         imageUrl: imageUrl || null,
         imageUrls: imageUrls.length > 0 ? JSON.stringify(imageUrls) : null,
+        stockType,
+        stockQuantity: stockType === 'limited' && stockQty ? parseInt(stockQty, 10) : null,
         isPublished: true,
         createdAt: new Date(),
       });

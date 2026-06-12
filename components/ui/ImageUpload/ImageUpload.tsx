@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef, useCallback } from 'react';
+import { useState, useRef, useCallback, useEffect } from 'react';
 import { Upload, X, Loader } from 'lucide-react';
 import styles from './ImageUpload.module.css';
 
@@ -20,22 +20,12 @@ export function ImageUpload({ value, values = [], onChange }: ImageUploadProps) 
   const [dragging, setDragging] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const maxImages = 6;
-  const onChangeRef = useRef(onChange);
-  onChangeRef.current = onChange;
-
-  function syncOnChange(next: string[]) {
-    onChangeRef.current(next[0] ?? null, next);
-  }
 
   const handleFile = useCallback(async (file: File) => {
     if (!file.type.startsWith('image/')) return;
 
     const localUrl = URL.createObjectURL(file);
-    setPreviews((prev) => {
-      const next = [...prev, localUrl];
-      syncOnChange(next);
-      return next;
-    });
+    setPreviews((prev) => [...prev, localUrl]);
     setUploading(true);
 
     try {
@@ -45,17 +35,9 @@ export function ImageUpload({ value, values = [], onChange }: ImageUploadProps) 
       if (!res.ok) throw new Error('Upload failed');
       const data = await res.json();
 
-      setPreviews((prev) => {
-        const next = prev.map((p) => (p === localUrl ? data.url : p));
-        syncOnChange(next);
-        return next;
-      });
+      setPreviews((prev) => prev.map((p) => (p === localUrl ? data.url : p)));
     } catch {
-      setPreviews((prev) => {
-        const next = prev.filter((p) => p !== localUrl);
-        syncOnChange(next);
-        return next;
-      });
+      setPreviews((prev) => prev.filter((p) => p !== localUrl));
     } finally {
       setUploading(false);
     }
@@ -67,6 +49,14 @@ export function ImageUpload({ value, values = [], onChange }: ImageUploadProps) 
       await handleFile(file);
     }
   }, [handleFile]);
+
+  const handleRemove = useCallback((index: number) => {
+    setPreviews((prev) => prev.filter((_, i) => i !== index));
+  }, []);
+
+  useEffect(() => {
+    onChange(previews[0] ?? null, previews);
+  }, [previews, onChange]);
 
   const handleDrop = useCallback((e: React.DragEvent) => {
     e.preventDefault();
@@ -90,14 +80,6 @@ export function ImageUpload({ value, values = [], onChange }: ImageUploadProps) 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (files && files.length > 0) handleFiles(files);
-  };
-
-  const handleRemove = (index: number) => {
-    setPreviews((prev) => {
-      const next = prev.filter((_, i) => i !== index);
-      syncOnChange(next);
-      return next;
-    });
   };
 
   const remaining = maxImages - previews.length;

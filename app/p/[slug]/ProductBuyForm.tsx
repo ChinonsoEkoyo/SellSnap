@@ -88,6 +88,9 @@ export function ProductBuyForm({ productId, unitPrice, stockType, stockQuantity,
               setError(result.message);
             }
             setProcessing(false);
+          }).catch(() => {
+            setError('Payment could not be confirmed. Please contact support.');
+            setProcessing(false);
           });
         },
         onClose: () => {

@@ -61,4 +61,14 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   },
 });
 
-export const getSession = () => auth();
+export const getSession = async () => {
+  const session = await auth();
+  if (session?.user?.id) {
+    const user = await db.user.findUnique({
+      where: { id: session.user.id },
+      select: { id: true },
+    });
+    if (!user) return null;
+  }
+  return session;
+};

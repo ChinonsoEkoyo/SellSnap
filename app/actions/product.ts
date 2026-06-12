@@ -5,7 +5,7 @@ import { nanoid } from 'nanoid';
 import { db } from '@/lib/db';
 import { getSession } from '@/lib/auth';
 import { logger } from '@/lib/logger';
-import { createProductSchema } from '@/lib/validators/product';
+import { createProductSchema, updateProductSchema } from '@/lib/validators/product';
 
 export type ProductFormState = {
   message: string;
@@ -14,6 +14,12 @@ export type ProductFormState = {
     id: string;
     name: string;
     slug: string;
+    price: number;
+    imageUrl: string | null;
+    imageUrls: string | null;
+    description: string | null;
+    stockType: string;
+    stockQuantity: number | null;
   };
 };
 
@@ -64,9 +70,66 @@ export async function createProduct(
       },
     });
 
-    return { message: '', success: true, product: { id: product.id, name: product.name, slug: product.slug } };
+    return { message: '', success: true, product: { id: product.id, name: product.name, slug: product.slug, price: product.price, imageUrl: product.imageUrl, imageUrls: product.imageUrls, description: product.description, stockType: product.stockType, stockQuantity: product.stockQuantity } };
   } catch (error) {
     logger.error('product.create.failed', { error });
+    return { message: 'Something went wrong. Please try again.' };
+  }
+}
+
+export async function updateProduct(
+  _previousState: ProductFormState,
+  formData: FormData,
+): Promise<ProductFormState> {
+  const session = await getSession();
+
+  if (!session?.user?.id) {
+    return { message: 'You must be signed in.' };
+  }
+
+  const parsed = updateProductSchema.safeParse({
+    id: formData.get('id'),
+    name: formData.get('name'),
+    description: formData.get('description'),
+    price: formData.get('price'),
+    stockType: formData.get('stockType'),
+    stockQuantity: formData.get('stockQuantity') || undefined,
+    imageUrl: formData.get('imageUrl'),
+    imageUrls: formData.get('imageUrls'),
+  });
+
+  if (!parsed.success) {
+    return { message: 'Check your product details and try again.' };
+  }
+
+  const { id, name, description, price, stockType, stockQuantity, imageUrl, imageUrls } = parsed.data;
+
+  try {
+    const existing = await db.product.findUnique({
+      where: { id },
+      select: { userId: true },
+    });
+
+    if (!existing || existing.userId !== session.user.id) {
+      return { message: 'Product not found.' };
+    }
+
+    const product = await db.product.update({
+      where: { id },
+      data: {
+        name,
+        description: description || null,
+        price: Math.round(price * 100),
+        imageUrl: imageUrl || null,
+        imageUrls: imageUrls || null,
+        stockType,
+        stockQuantity: stockType === 'limited' && stockQuantity ? parseInt(String(stockQuantity), 10) : null,
+      },
+    });
+
+    return { message: '', success: true, product: { id: product.id, name: product.name, slug: product.slug, price: product.price, imageUrl: product.imageUrl, imageUrls: product.imageUrls, description: product.description, stockType: product.stockType, stockQuantity: product.stockQuantity } };
+  } catch (error) {
+    logger.error('product.update.failed', { error });
     return { message: 'Something went wrong. Please try again.' };
   }
 }

@@ -109,17 +109,33 @@ model Order {
 }
 
 model Payment {
-  id               String   @id @default(cuid())
-  orderId          String   @unique @map("order_id")
-  gatewayReference String   @unique @map("gateway_reference") // Paystack transaction reference
-  amount           Int      // Stored in kobo
-  currency         String   @default("NGN")
-  status           String   @default("pending")
+  id               String       @id @default(cuid())
+  orderId          String       @unique @map("order_id")
+  gatewayReference String       @unique @map("gateway_reference") // Paystack transaction reference
+  amount           Int          // Stored in kobo
+  currency         String       @default("NGN")
+  status           String       @default("pending")
+  metadata         String?      // JSON: raw Paystack verification response
   
-  order            Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  order            Order        @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  logs             PaymentLog[]
 
-  createdAt        DateTime @default(now()) @map("created_at")
-  updatedAt        DateTime @updatedAt @map("updated_at")
+  createdAt        DateTime     @default(now()) @map("created_at")
+  updatedAt        DateTime     @updatedAt @map("updated_at")
 
   @@map("payments")
+}
+
+model PaymentLog {
+  id        String   @id @default(cuid())
+  paymentId String   @map("payment_id")
+  event     String   // e.g. initiated, verified, completed, failed, amount_mismatch
+  message   String?
+  metadata  String?  // JSON: additional event context
+
+  payment   Payment  @relation(fields: [paymentId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("payment_logs")
 }
